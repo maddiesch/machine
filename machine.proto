@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package machine;
+
+message TokenIL {
+  enum Kind {
+    NONE = 0;
+    VALUE = 1;
+    OPEN = 2;
+    CLOSE = 3;
+    END = 4;
+    DOT = 5;
+    PIPE = 6;
+    ASSIGN = 7;
+    VAR = 8;
+  }
+
+  Kind kind = 1;
+  string value = 2;
+  uint32 line = 3;
+  uint32 column = 4;
+}
+
+message NodeIL {
+  enum Kind {
+    NONE = 0;
+    ROOT = 1;
+    GROUP = 2;
+    FUNC = 3;
+    VALUE = 4;
+    ASSIGN = 5;
+    VAR = 6;
+    NAT = 7;
+  }
+
+  message DValue {
+    enum Kind {
+      STR = 0;
+      FLT = 1;
+      BOOL = 2;
+    }
+
+    Kind kind = 1;
+    string str = 2;
+    double flt = 3;
+    bool bool = 4;
+  }
+
+  bytes id = 1;
+  Kind kind = 2;
+  repeated NodeIL children = 3;
+  NodeIL chained = 4;
+  DValue value = 5;
+  string sub_type = 6;
+}
+
+message ProgramIL {
+  bytes id = 1;
+  string source = 2;
+  NodeIL entry = 3;
+  map<string, uint64> func_calls = 4;
+}
